@@ -2,7 +2,7 @@
     "name": "message-await",
     "version": "0.0.0",
     "description": "A utility to print message with an async success or failure in node.js",
-    "main": "index.js",
+    "main": "dist/src/index.js",
     "scripts": {
         "clean": "rimraf dist",
         "build": "tsc",
