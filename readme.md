@@ -72,4 +72,5 @@ someAsyncFunction(onProgressCallback, onCompleteCallback);
 ![Await Success Example](https://github.com/Roaders/message-await/raw/master/assets/awaitSuccess.gif)
 
 #### Fail
+The above example exits the process and prints the error message when the promise is rejected:
 ![Await Fail Example](https://github.com/Roaders/message-await/raw/master/assets/awaitFail.gif)
