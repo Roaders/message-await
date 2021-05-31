@@ -6,9 +6,8 @@ async function awaitFail() {
         setTimeout(reject, 1500, 'Error: something went wrong');
     });
 
-    await print('Waiting', true, chalk.blue).await(examplePromise, true, true, 'Done', 'Fail');
-
-    console.log(`await complete`);
+    const result = await print('Waiting', true, chalk.blue).await(examplePromise, true, true, 'Done', 'Fail');
+    console.log(`await complete: '${result}'`);
 }
 
 awaitFail();
