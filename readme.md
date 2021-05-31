@@ -66,7 +66,7 @@ someAsyncFunction(onProgressCallback, onCompleteCallback);
 ### Await
 
 ```ts
-    const result = await print('Waiting', true, chalk.blue).await(somePromise, false, false, 'Done');
+    const result = await print('Waiting', true, chalk.blue).await(examplePromise, true, true, 'Done', 'Fail');
 ```
 #### Success
 ![Await Success Example](https://github.com/Roaders/message-await/raw/master/assets/awaitSuccess.gif)
