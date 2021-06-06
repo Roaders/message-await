@@ -6,7 +6,13 @@ async function awaitSuccess() {
         setTimeout(resolve, 1500, 'returned result');
     });
 
-    const result = await print('Waiting', true, chalk.blue).await(examplePromise, true, true, 'Done', 'Fail');
+    const result = await print('Waiting', { spinner: true, format: chalk.blue }).await(
+        examplePromise,
+        true,
+        true,
+        'Done',
+        'Fail'
+    );
     console.log(`await complete: '${result}'`);
 }
 

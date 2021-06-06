@@ -22,6 +22,7 @@
     "author": "Giles Roadnight",
     "license": "ISC",
     "dependencies": {
+        "cli-cursor": "^3.1.0",
         "log-symbols": "^4.1.0"
     },
     "devDependencies": {

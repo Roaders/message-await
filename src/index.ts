@@ -1,67 +1,23 @@
 import { clearLine, cursorTo } from 'readline';
+import { hide, show } from 'cli-cursor';
+import { MessageAwait, MessageAwaitOptions } from './contracts';
+import { defaultOptions } from './constants';
+
+export * from './contracts';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const logSymbols = require('log-symbols');
 
-export type ResolveMessage = {
-    /**
-     * awaits the completion of a promise and marks the message as success or failure based on the promise
-     * @param promise
-     * @param exitProcess - if the promise is rejected exits the node process. Defaults to false
-     * @param printError - if the promise is rejected prints the error that is returned. Defaults to false
-     * @param updateSuccessMessage - optional. update the message on success
-     * @param updateFailureMessage - optional. update the message on rejection
-     */
-    await: <T>(
-        promise: Promise<T>,
-        exitProcess?: boolean,
-        printError?: boolean,
-        updateSuccessMessage?: string,
-        updateFailureMessage?: string
-    ) => Promise<T>;
-    /**
-     * marks the message as complete.
-     * @param success - defaults to true. Adds a tick or a cross to the message
-     * @param updateMessage - optionally updates the displayed message
-     */
-    complete: (success?: boolean, updateMessage?: string) => void;
-    /**
-     * Marks the message as complete with a tick.
-     * Optionally update the displayed message
-     */
-    success: (updateMessage?: string) => void;
-    /**
-     * Marks the message as failed with a cross.
-     * Optionally update the displayed message
-     */
-    fail: (updateMessage?: string) => void;
-    /**
-     * logs a message whilst waiting for the main message to complete pass any number of items to be logged using console.log
-     */
-    log: (message: string, ...optional: unknown[]) => void;
-    /**
-     * Updates the message. For example could display progress: updateMessage(`Loaded 3/4`);
-     * Optionally start or stop the spinner.
-     */
-    updateMessage: (message: string, spinner?: boolean) => void;
-    /**
-     * gets the currently displayed message
-     */
-    getMessage: () => string;
-};
-
 /**
  * prints the initial message
  * @param message - message to display
- * @param spinner - boolean, defaults to false - indicate progress with animated ellipses
- * @param format - optional, format the displayed message. Can use chalk.blue for example
- * @returns ResolveMessage - options to complete the message when done
+ * @param options - MessageAwaitOptions
+ * @returns MessageAwait - options to complete the message when done or update the message with progress info
  */
-export default function print(message: string, spinner = false, format?: (message: string) => string): ResolveMessage {
+export default function print(message: string, options?: Partial<MessageAwaitOptions>): MessageAwait {
+    const requiredOptions = { ...defaultOptions, ...options };
     let timeout: NodeJS.Timeout | undefined;
     let isComplete = false;
-
-    const formatMessage = format || ((value) => value);
 
     let dotCount = 3;
 
@@ -74,7 +30,7 @@ export default function print(message: string, spinner = false, format?: (messag
             dots = dots + ' ';
         }
 
-        return formatMessage(message + dots);
+        return requiredOptions.format(message + dots);
     }
 
     function resetCursor() {
@@ -102,12 +58,6 @@ export default function print(message: string, spinner = false, format?: (messag
                     writeMessage();
             }
         }, 300).unref();
-    }
-
-    if (spinner) {
-        startTimer();
-    } else {
-        writeMessage();
     }
 
     function updateMessage(messageUpdate: string, spinner?: boolean) {
@@ -151,6 +101,10 @@ export default function print(message: string, spinner = false, format?: (messag
         } else {
             console.log(`${generateMessage()} ${logSymbols.error}`);
         }
+
+        if (requiredOptions.hideCursor) {
+            show();
+        }
     }
 
     function success(updateMessage?: string) {
@@ -187,6 +141,16 @@ export default function print(message: string, spinner = false, format?: (messag
 
     function getMessage() {
         return message;
+    }
+
+    if (requiredOptions.hideCursor) {
+        hide();
+    }
+
+    if (requiredOptions.spinner) {
+        startTimer();
+    } else {
+        writeMessage();
     }
 
     return { complete, log, updateMessage, getMessage, success, fail, await };
