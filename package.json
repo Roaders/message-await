@@ -1,6 +1,6 @@
 {
     "name": "message-await",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "A utility to print message with an async success or failure in node.js",
     "main": "dist/src/index.js",
     "scripts": {
