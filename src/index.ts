@@ -66,9 +66,14 @@ export default function print(message: string, spinner = false, format?: (messag
     let dotCount = 3;
 
     function generateMessage() {
-        const dots = Array.from({ length: dotCount })
+        let dots = Array.from({ length: dotCount })
             .map(() => '.')
             .join('');
+
+        while (dots.length < 3) {
+            dots = dots + ' ';
+        }
+
         return formatMessage(message + dots);
     }
 
@@ -78,6 +83,7 @@ export default function print(message: string, spinner = false, format?: (messag
     }
 
     function writeMessage() {
+        resetCursor();
         process.stdout.write(generateMessage());
     }
 
@@ -89,12 +95,11 @@ export default function print(message: string, spinner = false, format?: (messag
             switch (dotCount) {
                 case 3:
                     dotCount = 0;
-                    cursorTo(process.stdout, message.length);
-                    clearLine(process.stdout, 1);
+                    writeMessage();
                     break;
                 default:
                     dotCount++;
-                    process.stdout.write(formatMessage(`.`));
+                    writeMessage();
             }
         }, 300).unref();
     }
@@ -118,7 +123,6 @@ export default function print(message: string, spinner = false, format?: (messag
         }
 
         message = messageUpdate;
-        resetCursor();
         writeMessage();
     }
 
