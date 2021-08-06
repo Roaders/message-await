@@ -119,12 +119,15 @@ export default function print(message: string, options?: Partial<MessageAwaitOpt
         promise: Promise<T>,
         exitProcess?: boolean,
         printError?: boolean,
-        updateSuccessMessage?: string,
+        updateSuccessMessage?: string | ((result: T) => string),
         updateFailureMessage?: string
     ): Promise<T> {
         return promise
             .then((value) => {
-                complete(true, updateSuccessMessage);
+                complete(
+                    true,
+                    typeof updateSuccessMessage === 'function' ? updateSuccessMessage(value) : updateSuccessMessage
+                );
                 return value;
             })
             .catch((err) => {
