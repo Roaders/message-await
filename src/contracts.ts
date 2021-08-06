@@ -28,7 +28,7 @@ export type MessageAwait = {
         promise: Promise<T>,
         exitProcess?: boolean,
         printError?: boolean,
-        updateSuccessMessage?: string,
+        updateSuccessMessage?: string | ((result: T) => string),
         updateFailureMessage?: string
     ) => Promise<T>;
     /**
