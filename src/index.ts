@@ -1,6 +1,6 @@
 import { clearLine, cursorTo } from 'readline';
 import { hide, show } from 'cli-cursor';
-import { MessageAwait, MessageAwaitOptions } from './contracts';
+import { MessageAwait, MessageAwaitOptions, UpdateMessage } from './contracts';
 import { defaultOptions } from './constants';
 
 export * from './contracts';
@@ -115,14 +115,22 @@ export default function print(message: string, options?: Partial<MessageAwaitOpt
         return complete(false, updateMessage);
     }
 
+    function getMessage() {
+        return message;
+    }
+
     function await<T>(
-        promise: Promise<T>,
+        promise: Promise<T> | ((updateMessage: UpdateMessage) => Promise<T>),
         exitProcess?: boolean,
         printError?: boolean,
         updateSuccessMessage?: string | ((result: T) => string),
-        updateFailureMessage?: string
+        updateFailureMessage?: string | ((error: unknown) => string)
     ): Promise<T> {
-        return promise
+        return (
+            typeof promise === 'function'
+                ? promise({ complete, log, updateMessage, getMessage, success, fail })
+                : promise
+        )
             .then((value) => {
                 complete(
                     true,
@@ -131,7 +139,10 @@ export default function print(message: string, options?: Partial<MessageAwaitOpt
                 return value;
             })
             .catch((err) => {
-                complete(false, updateFailureMessage);
+                complete(
+                    false,
+                    typeof updateFailureMessage === 'function' ? updateFailureMessage(err) : updateFailureMessage
+                );
                 if (printError) {
                     console.error(err);
                 }
@@ -140,10 +151,6 @@ export default function print(message: string, options?: Partial<MessageAwaitOpt
                 }
                 return Promise.reject<T>(err);
             });
-    }
-
-    function getMessage() {
-        return message;
     }
 
     if (requiredOptions.hideCursor) {

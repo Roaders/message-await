@@ -15,22 +15,7 @@ export type MessageAwaitOptions = {
     hideCursor: boolean;
 };
 
-export type MessageAwait = {
-    /**
-     * awaits the completion of a promise and marks the message as success or failure based on the promise
-     * @param promise
-     * @param exitProcess - if the promise is rejected exits the node process. Defaults to false
-     * @param printError - if the promise is rejected prints the error that is returned. Defaults to false
-     * @param updateSuccessMessage - optional. update the message on success
-     * @param updateFailureMessage - optional. update the message on rejection
-     */
-    await: <T>(
-        promise: Promise<T>,
-        exitProcess?: boolean,
-        printError?: boolean,
-        updateSuccessMessage?: string | ((result: T) => string),
-        updateFailureMessage?: string
-    ) => Promise<T>;
+export interface UpdateMessage {
     /**
      * marks the message as complete.
      * @param success - defaults to true. Adds a tick or a cross to the message
@@ -60,4 +45,22 @@ export type MessageAwait = {
      * gets the currently displayed message
      */
     getMessage: () => string;
-};
+}
+
+export interface MessageAwait extends UpdateMessage {
+    /**
+     * awaits the completion of a promise and marks the message as success or failure based on the promise
+     * @param promise
+     * @param exitProcess - if the promise is rejected exits the node process. Defaults to false
+     * @param printError - if the promise is rejected prints the error that is returned. Defaults to false
+     * @param updateSuccessMessage - optional. update the message on success
+     * @param updateFailureMessage - optional. update the message on rejection
+     */
+    await: <T>(
+        promise: Promise<T> | ((updateMessage: UpdateMessage) => Promise<T>),
+        exitProcess?: boolean,
+        printError?: boolean,
+        updateSuccessMessage?: string | ((result: T) => string),
+        updateFailureMessage?: string | ((error: unknown) => string)
+    ) => Promise<T>;
+}
