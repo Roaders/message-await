@@ -11,7 +11,7 @@ async function awaitSuccess() {
         true,
         true,
         'Done',
-        'Fail'
+        'Fail',
     );
     console.log(`await complete: '${result}'`);
 }

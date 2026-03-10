@@ -61,6 +61,6 @@ export interface MessageAwait extends UpdateMessage {
         exitProcess?: boolean,
         printError?: boolean,
         updateSuccessMessage?: string | ((result: T) => string),
-        updateFailureMessage?: string | ((error: unknown) => string)
+        updateFailureMessage?: string | ((error: unknown) => string),
     ) => Promise<T>;
 }

@@ -5,7 +5,6 @@ import { defaultOptions } from './constants';
 
 export * from './contracts';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const logSymbols = require('log-symbols');
 
 /**
@@ -124,7 +123,7 @@ export default function print(message: string, options?: Partial<MessageAwaitOpt
         exitProcess?: boolean,
         printError?: boolean,
         updateSuccessMessage?: string | ((result: T) => string),
-        updateFailureMessage?: string | ((error: unknown) => string)
+        updateFailureMessage?: string | ((error: unknown) => string),
     ): Promise<T> {
         return (
             typeof promise === 'function'
@@ -134,14 +133,14 @@ export default function print(message: string, options?: Partial<MessageAwaitOpt
             .then((value) => {
                 complete(
                     true,
-                    typeof updateSuccessMessage === 'function' ? updateSuccessMessage(value) : updateSuccessMessage
+                    typeof updateSuccessMessage === 'function' ? updateSuccessMessage(value) : updateSuccessMessage,
                 );
                 return value;
             })
             .catch((err) => {
                 complete(
                     false,
-                    typeof updateFailureMessage === 'function' ? updateFailureMessage(err) : updateFailureMessage
+                    typeof updateFailureMessage === 'function' ? updateFailureMessage(err) : updateFailureMessage,
                 );
                 if (printError) {
                     console.error(err);
