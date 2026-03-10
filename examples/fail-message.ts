@@ -1,4 +1,4 @@
-import print from '../src';
+import print from '../src/index.js';
 
 const messageAwait = print('Waiting');
 

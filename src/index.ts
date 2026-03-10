@@ -1,11 +1,10 @@
 import { clearLine, cursorTo } from 'readline';
 import { hide, show } from 'cli-cursor';
-import { MessageAwait, MessageAwaitOptions, UpdateMessage } from './contracts';
-import { defaultOptions } from './constants';
+import { MessageAwait, MessageAwaitOptions, UpdateMessage } from './contracts.js';
+import { defaultOptions } from './constants.js';
+import logSymbols from 'log-symbols';
 
-export * from './contracts';
-
-const logSymbols = require('log-symbols');
+export * from './contracts.js';
 
 /**
  * prints the initial message

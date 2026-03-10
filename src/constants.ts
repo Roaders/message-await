@@ -1,4 +1,4 @@
-import { MessageAwaitOptions } from './contracts';
+import { MessageAwaitOptions } from './contracts.js';
 
 export const defaultOptions: MessageAwaitOptions = {
     spinner: false,
