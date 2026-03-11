@@ -1,6 +1,6 @@
 {
 	"name": "message-await",
-	"version": "1.1.0",
+	"version": "2.0.0",
 	"description": "A utility to print message with an async success or failure in node.js",
 	"main": "dist/src/index.js",
 	"scripts": {
@@ -12,10 +12,19 @@
 		"verify-release": "concurrently npm:lint npm:build",
 		"prepublishOnly": "npm run clean && npm run verify-release"
 	},
-	"keywords": ["async", "node", "await", "print", "message"],
+	"keywords": [
+		"async",
+		"node",
+		"await",
+		"print",
+		"message"
+	],
 	"author": "Giles Roadnight",
 	"license": "ISC",
-	"dependencies": {"cli-cursor": "^3.1.0", "log-symbols": "^4.1.0"},
+	"dependencies": {
+		"cli-cursor": "^3.1.0",
+		"log-symbols": "^4.1.0"
+	},
 	"devDependencies": {
 		"@types/node": "^14.17.9",
 		"@typescript-eslint/eslint-plugin": "^8.57.0",
